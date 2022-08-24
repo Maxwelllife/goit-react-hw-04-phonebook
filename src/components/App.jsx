@@ -1,5 +1,5 @@
 import 'modern-normalize/modern-normalize.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SectionTitle from './Section/SectionTitle';
 import ContactsForm from './ContactsForm/ContactsForm';
 import ContactList from './ContactList/ContactList';
@@ -11,14 +11,21 @@ import { nanoid } from 'nanoid';
 const App = () => {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
-  console.log('contacts: ', contacts);
+  const firstRender = useRef(true);
 
   useEffect(() => {
     const contacts = JSON.parse(localStorage.getItem('contacts')) ?? [];
     if (contacts?.length) {
       setContacts([...contacts]);
     }
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      localStorage.setItem('my-contacts', JSON.stringify(contacts));
+      return;
+    }
+    firstRender.current = false;
   }, [contacts]);
 
   const onChangeFilterValue = event => {
