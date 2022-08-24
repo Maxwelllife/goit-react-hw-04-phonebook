@@ -22,7 +22,7 @@ const App = () => {
 
   useEffect(() => {
     if (!firstRender.current) {
-      localStorage.setItem('my-contacts', JSON.stringify(contacts));
+      localStorage.setItem('contacts', JSON.stringify(contacts));
       return;
     }
     firstRender.current = false;
