@@ -7,11 +7,14 @@ import Filter from './Filter/Filter';
 import s from './app.module.css';
 
 import { nanoid } from 'nanoid';
+import { useSearchParams } from 'react-router-dom';
 
 const App = () => {
   const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+  // const [filter, setFilter] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
   const firstRender = useRef(true);
+  const filter = searchParams.get('value') ?? '';
 
   useEffect(() => {
     const contacts = JSON.parse(localStorage.getItem('contacts')) ?? [];
@@ -29,11 +32,16 @@ const App = () => {
   }, [contacts]);
 
   const onChangeFilterValue = event => {
-    setFilter(event.target.value);
+    // setFilter(event.target.value);
+
+    const nextParams =
+      event.target.value !== '' ? { value: event.target.value } : {};
+    setSearchParams(nextParams);
   };
 
   const compareContacts = () => {
     const normalizeFilter = filter.toLowerCase().trim();
+    console.log('filter: ', filter);
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizeFilter)
     );
